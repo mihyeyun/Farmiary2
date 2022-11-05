@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
+<div th:fragment="leftBlog" class="left">
+    <div class="list-group">
+        <a href="/board/boardMain" class="list-group-item">게시글 목록</a>
+        <a href="/board/bloger" class="list-group-item">블로거 목록</a>
+	    <a class="nav-link" href="/user/board/boardForm" sec:authorize="hasAnyAuthority({'ROLE_SELLER'})">게시글 작성</a>
+    </div>
+</div>
+</html>

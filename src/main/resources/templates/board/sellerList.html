@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout3}">
+
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+
+        $(document).ready(function(){
+            $("#searchBtn").on("click",function(e) {
+                e.preventDefault();
+                page(0);
+            });
+        });
+
+        function page(page){
+
+            location.href="/admin/requestPermit/" + page
+
+        }
+
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+
+<div layout:fragment="content" class="content-mg" style="width:80%; margin:auto;">
+
+  <h2 class="mb-4">
+    농부님들
+  </h2>
+  <div>
+    <table class="table">
+      <thead>
+      <tr class="text-center">
+        <td>회원번호</td>
+        <td>회원아이디</td>
+        <td>회원이름</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="member, status: ${members.getContent()}">
+        <td class="text-center align-middle">[[${member.id}]]</td>
+        <td class="text-center align-middle">[[${member.email}]]</td>
+        <td class="text-center align-middle">[[${member.name}]]</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <form th:object="${members}">
+    <div th:with="start=${(members.number/maxPage)*maxPage + 1}, end=(${(members.totalPages == 0) ? 1 : (start + (maxPage - 1) < members.totalPages ? start + (maxPage - 1) : members.totalPages)})" >
+      <ul class="pagination justify-content-center">
+
+        <li class="page-item" th:classappend="${members.first}?'disabled'">
+          <a th:onclick="'javascript:page(' + ${members.number - 1} + ')'" aria-label='Previous' class="page-link">
+            <span aria-hidden='true'>Previous</span>
+          </a>
+        </li>
+
+        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${members.number eq page-1}?'active':''">
+          <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+        </li>
+
+        <li class="page-item" th:classappend="${members.last}?'disabled'">
+          <a th:onclick="'javascript:page(' + ${members.number + 1} + ')'" aria-label='Next' class="page-link">
+            <span aria-hidden='true'>Next</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    </form>
+  </div>
+
+</div>
+
+</html>

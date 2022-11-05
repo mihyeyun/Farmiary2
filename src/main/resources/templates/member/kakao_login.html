@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- 사용자 CSS 추가 -->
+    <th:block layout:fragment="css">
+        <style>
+           .customLogin{
+                width: 300px;
+                height: 65px;
+                background: beige;
+                margin: 0 auto;
+                border-radius: 5px;
+                line-height: 65px;
+                margin-top: 20px;
+                font-size: 18px;
+                font-weight: bold;
+            }
+      </style>
+    </th:block>
+
+</head>
+<body>
+    <div layout:fragment="content">
+
+    <main id="main">
+        <section id="contact" class="contact mb-5">
+            <div class="container" data-aos="fade-up">
+
+                <div class="row">
+                    <div class="col-lg-12 text-center mb-5">
+                        <h1 class="page-title">로그인</h1>
+                    </div>
+                </div>
+            <div class="form-group text-center">
+               `<a href="#" onclick="kakaoLogin();">
+                    <img src="../bootstrap/img/kakao_login.png" style="width:300px;">
+                </a>
+            </div>
+
+            <div class="customLogout form-group text-center my-3">
+                <li onclick="kakaoLogout();">
+                    <a href="#">
+                        <span>카카오 계정을 로그아웃 하시려면<br>여기를 클릭해주세요</span>
+                    </a>
+                </li>
+            </div>
+            <hr>
+            <div class="customLogin form-group text-center">
+                <a href="/members/login">
+                    <p>GuroKurly 로그인</p>
+                </a>
+            </div>
+
+                <!-- 카카오톡 로그인 api -->
+           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+           <script>
+            <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.0.0/kakao.min.js"
+                  integrity="sha384-PFHeU/4gvSH8kpvhrigAPfZGBDPs372JceJq3jAXce11bVA6rMvGWzvP4fMQuBGL" crossorigin="anonymous"></script>
+
+            <script>
+            Kakao.init('9a6512938d180dc4044f6e8f3874c870'); //발급받은 키 중 javascript키를 사용해준다.
+            console.log(Kakao.isInitialized()); // sdk초기화여부판단
+
+            //카카오로그인
+            function kakaoLogin() {
+                Kakao.Auth.login({
+                  success: function (response) {
+                    Kakao.API.request({
+                      url: '/v2/user/me',
+                      success: function (response) {
+                          console.log(response)
+                      },
+                      fail: function (error) {
+                        console.log(error)
+                      },
+                    })
+                  },
+                  fail: function (error) {
+                    console.log(error)
+                  },
+                })
+              }
+              function kakaoLogout() {
+                if (Kakao.Auth.getAccessToken()) {
+                  Kakao.API.request({
+                    url: '/v1/user/unlink',
+                    success: function (response) {
+                        console.log(response)
+                    },
+                    fail: function (error) {
+                      console.log(error)
+                    },
+                  })
+                  Kakao.Auth.setAccessToken(undefined)
+                }
+              }
+            </script>
+            </th:block>
+          </script>
+        </div>`
+        </section>
+    </main>
+    </div>
+</body>
+</html>
